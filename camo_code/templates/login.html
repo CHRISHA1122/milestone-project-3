@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Sign In / Log In Form -->
+<div class="container">
+    <h2 class="center-align">Log in</h2>
+    <form method="POST" action="{{ url_for('login') }}">
+      {{ form.hidden_tag() }}
+      <div class="input-field">
+        <i class="fas fa-envelope">email</i>
+        {{ form.email(class="validate") }}
+        <label for="{{ form.email.id }}">Email</label>
+      </div>
+      <div class="input-field">
+        <i class="fas fa-lock">lock</i>
+        {{ form.password(class="validate") }}
+        <label for="{{ form.password.id }}">Password</label>
+      </div>
+      <p>
+        <label>
+          <input type="checkbox" class="filled-in" name="remember_me" id="{{ form.remember_me.id }}" {% if form.remember_me.checked %}checked{% endif %}>
+          <span>Remember me</span>
+        </label>
+      </p>
+      <button class="btn waves-effect waves-light" type="submit" name="action">Log in>
+        <i class="fas fa-share">send</i>
+      </button>
+    </form>
+</div>
+{% endblock %}

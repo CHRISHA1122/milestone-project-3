@@ -28,7 +28,7 @@ def login():
             flash("Invalid email or password")
             return redirect(url_for("login"))
         login_user(user, remember=form.remember_me.data)
-        return redirect(request.args.get("next") or url_for("home"))
+        return redirect(next_page) if next_page else redirect(url_for("home"))
     return render_template("login.html", title="Sign In", form=form)
 
 
@@ -44,8 +44,10 @@ def register():
         return redirect(url_for("home"))
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
+        hashed_password = generate_password_hash(form.password.data)
+        user = User(
+            username=form.username.data, email=form.email.data,
+            password=hashed_password)
         db.session.add(user)
         db.session.commit()
         flash("Congratulations, you are now a registered user!")
