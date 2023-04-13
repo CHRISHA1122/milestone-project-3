@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Welcome, {{ current_user.username }}!</h1>
+  <p>Email: {{ current_user.email }}</p>
+  
+  <h2>Your Posts:</h2>
+  {% for post in current_user.posts %}
+    <div class="post">
+      <h3>{{ post.title }}</h3>
+      <p>{{ post.code_snippet }}</p>
+      <p>{{ post.timestamp }}</p>
+    </div>
+  {% endfor %}
+
+  <h2>Your Comments:</h2>
+  {% for comment in current_user.comments %}
+    <div class="comment">
+      <p>{{ comment.body }}</p>
+      <p>{{ comment.timestamp }}</p>
+      <p>On post: {{ comment.post.title }}</p>
+    </div>
+  {% endfor %}
+  
+  <h2>Update Profile:</h2>
+  <form action="{{ url_for('update_profile') }}" method="post">
+    {{ form.hidden_tag() }}
+    {{ form.username.label }} {{ form.username }} <br>
+    {{ form.email.label }} {{ form.email }} <br>
+    {{ form.password.label }} {{ form.password }} <br>
+    {{ form.confirm_password.label }} {{ form.confirm_password }} <br>
+    <input type="submit" value="Update">
+  </form>
+
+  <h2>Delete Account:</h2>
+  <form action="{{ url_for('delete_account') }}" method="post">
+    {{ form.hidden_tag() }}
+    <input type="submit" value="Delete Account">
+  </form>
+
+{% endblock %}
