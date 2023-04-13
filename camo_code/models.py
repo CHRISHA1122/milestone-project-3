@@ -22,6 +22,19 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
 
+class Profile(db.Model):
+    # schema for the Profile model
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(64))
+    last_name = db.Column(db.String(64))
+    bio = db.Column(db.String(280))
+    location = db.Column(db.String(64))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    def __repr__(self):
+        return "<Profile {}>".format(self.first_name)
+
+
 class Post(db.Model):
     # schema for the Post model
     id = db.Column(db.Integer, primary_key=True)

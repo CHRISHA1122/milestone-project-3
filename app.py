@@ -1,6 +1,5 @@
 import os
-from camo_code import app, db
-
+from camo_code import app, db, login_manager
 
 if __name__ == "__main__":
     with app.app_context():

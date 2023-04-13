@@ -11,6 +11,12 @@ def home():
     return render_template("home.html")
 
 
+@app.route("/profile")
+@login_required
+def profile():
+    return render_template("profile.html", title="Profile")
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
