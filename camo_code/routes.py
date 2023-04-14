@@ -14,7 +14,7 @@ def home():
 @app.route("/profile")
 @login_required
 def profile():
-    return render_template("profile.html", title="Profile")
+    return render_template("profile.html", current_user=current_user)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -23,12 +23,12 @@ def login():
         return redirect(url_for("home"))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash("Invalid email or password")
             return redirect(url_for("login"))
         login_user(user, remember=form.remember_me.data)
-        return redirect(next_page) if next_page else redirect(url_for("home"))
+        return redirect(url_for("home"))
     return render_template("login.html", title="Sign In", form=form)
 
 
@@ -44,10 +44,8 @@ def register():
         return redirect(url_for("home"))
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = generate_password_hash(form.password.data)
-        user = User(
-            username=form.username.data, email=form.email.data,
-            password=hashed_password)
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
         flash("Congratulations, you are now a registered user!")

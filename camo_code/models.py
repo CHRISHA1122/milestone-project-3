@@ -1,6 +1,9 @@
 from camo_code import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired, Email, EqualTo
 
 
 class User(db.Model):
@@ -11,6 +14,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(128))
     posts = db.relationship("Post", backref="author", lazy="dynamic")
     comments = db.relationship("Comment", backref="author", lazy="dynamic")
+    profile = db.relationship("Profile", backref="user", uselist=False)
 
     def __repr__(self):
         return "<User {}>".format(self.username)
@@ -58,3 +62,13 @@ class Comment(db.Model):
 
     def __repr__(self):
         return '<Comment {}>'.format(self.body)
+
+
+class RegistrationForm(FlaskForm):
+    # schema for the registration model
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField('Repeat Password', validators=[
+        DataRequired(), EqualTo('password')])
+    submit = SubmitField('Register')

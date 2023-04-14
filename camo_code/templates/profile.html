@@ -1,45 +1,56 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Welcome, {{ current_user.username }}!</h1>
-  <p>Email: {{ current_user.email }}</p>
-  
-  <h2>Your Posts:</h2>
-  {% for post in current_user.posts %}
-    <div class="post">
-      <h3>{{ post.title }}</h3>
-      <p>{{ post.code_snippet }}</p>
-      <p>{{ post.timestamp }}</p>
+<div class="container">
+  <div class="row">
+    <div class="col s12">
+      {% if current_user.is_authenticated %}
+      <h1>Welcome, {{ current_user.username }}!</h1>
+      {% else %}
+      <h1>Anonymous User</h1>
+      <p>Sign up or log in to access your profile!</p>
+      {% endif %}
     </div>
-  {% endfor %}
+  </div>
 
-  <h2>Your Comments:</h2>
-  {% for comment in current_user.comments %}
-    <div class="comment">
-      <p>{{ comment.body }}</p>
-      <p>{{ comment.timestamp }}</p>
-      <p>On post: {{ comment.post.title }}</p>
+  {% if current_user.is_authenticated %}
+  <div class="row">
+    <div class="col s12 m8">
+      {% for post in current_user.posts %}
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">{{ post.title }}</span>
+          <p>{{ post.code_snippet }}</p>
+        </div>
+        <div class="card-action">
+          <a href="{{ url_for('post', post_id=post.id) }}">View</a>
+        </div>
+      </div>
+      {% endfor %}
     </div>
-  {% endfor %}
-  
-  <h2>Update Profile:</h2>
-  <form action="{{ url_for('update_profile') }}" method="post">
-    {{ form.hidden_tag() }}
-    {{ form.username.label }} {{ form.username }} <br>
-    {{ form.email.label }} {{ form.email }} <br>
-    {{ form.password.label }} {{ form.password }} <br>
-    {{ form.confirm_password.label }} {{ form.confirm_password }} <br>
-    <input type="submit" value="Update">
-  </form>
 
-  <h2>Delete Account:</h2>
-  <form action="{{ url_for('delete_account') }}" method="post">
-    {{ form.hidden_tag() }}
-    <input type="submit" value="Delete Account">
-  </form>
+    <div class="col s12 m4">
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">Profile Info</span>
+          <p>{{ current_user.profile.first_name }} {{ current_user.profile.last_name }}</p>
+          <p>{{ current_user.profile.bio }}</p>
+          <p>{{ current_user.profile.location }}</p>
+          <a href="{{ url_for('update_profile') }}">Edit Profile</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <h2>Register or Log In:</h2>
-  <p>If you haven't registered yet, you can <a href="{{ url_for('register') }}">register here</a>.</p>
-  <p>If you already have an account, you can <a href="{{ url_for('login') }}">log in here</a>.</p>
+  {% else %}
+  <div class="row">
+    <div class="col s12">
+      <p>Please sign up or log in to access your profile.</p>
+      <a href="{{ url_for('register') }}" class="btn">Sign up</a>
+      <a href="{{ url_for('login') }}" class="btn">Log in</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
 
 {% endblock %}
