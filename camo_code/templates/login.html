@@ -3,18 +3,23 @@
 
 <!-- Sign In / Log In Form -->
 <div class="container">
-    <h2 class="center-align">Log in</h2>
+    <h2 class="center-align">Log In</h2>
     <form method="POST" action="{{ url_for('login') }}">
       {{ form.hidden_tag() }}
+      {% if form.errors %}
+      <div class="alert alert-danger">
+        {% for error in form.errors %}
+        <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
       <div class="input-field">
-        <i class="fas fa-envelope">email</i>
         {{ form.email(class="validate") }}
-        <label for="{{ form.email.id }}">Email</label>
+        <label for="{{ form.email.id }}"><i class="fas fa-envelope"></i>  Email</label>
       </div>
       <div class="input-field">
-        <i class="fas fa-lock">lock</i>
         {{ form.password(class="validate") }}
-        <label for="{{ form.password.id }}">Password</label>
+        <label for="{{ form.password.id }}"><i class="fas fa-lock"></i>  Password</label>
       </div>
       <p>
         <label>
@@ -22,8 +27,8 @@
           <span>Remember me</span>
         </label>
       </p>
-      <button class="btn waves-effect waves-light" type="submit" name="action">Log in>
-        <i class="fas fa-share">send</i>
+      <button class="btn grey darken-3" type="submit" name="action">Log in>
+        <i class="fas fa-share"></i>
       </button>
     </form>
 </div>

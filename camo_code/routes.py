@@ -61,7 +61,6 @@ def user(username):
     form = UpdateProfileForm()
     if form.validate_on_submit():
         user.username = form.username.data
-        user.about_me = form.about_me.data
         db.session.commit()
         flash("Your profile has been updated.")
         return redirect(url_for("user", username=user.username))
@@ -69,3 +68,30 @@ def user(username):
         form.username.data = user.username
         form.about_me.data = user.about_me
     return render_template("user.html", user=user, form=form)
+
+
+@app.route("/post/new", methods=["GET", "POST"])
+@login_required
+def new_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(title=form.title.data, body=form.body.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash("Your post has been created!")
+        return redirect(url_for("home"))
+    return render_template("new_post.html", title="New Post", form=form)
+
+
+@app.route("/post/<int:post_id>", methods=["GET", "POST"])
+@login_required
+def post(post_id):
+    post = Post.query.get_or_404(post_id)
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(body=form.body.data, post=post, author=current_user)
+        db.session.add(comment)
+        db.session.commit()
+        flash("Your comment has been added!")
+        return redirect(url_for("post", post_id=post.id))
+    return render_template("post.html", post=post, form=form)
