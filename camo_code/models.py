@@ -55,13 +55,14 @@ class Post(db.Model):
 class Comment(db.Model):
     # schema for the Comment model
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.Text, nullable=False)
+    body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    code_id = db.Column(db.Integer, db.ForeignKey('code.id'))
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    post = db.relationship('Post', backref=db.backref('comments', lazy=True))
 
     def __repr__(self):
-        return '<Comment {}>'.format(self.body)
+        return f"Comment('{self.body}', '{self.date_posted}')"
 
 
 class Code(db.Model):
