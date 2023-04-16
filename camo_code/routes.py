@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from camo_code import app, db
 from camo_code.models import User, Post, Comment
-from camo_code.forms import LoginForm, RegistrationForm, UpdateProfileForm
+from camo_code.forms import LoginForm, RegistrationForm, UpdateProfileForm, PostForm
 
 
 @app.route("/")
@@ -75,7 +75,8 @@ def user(username):
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, body=form.body.data, author=current_user)
+        post = Post(
+            title=form.title.data, body=form.body.data, author=current_user)
         db.session.add(post)
         db.session.commit()
         flash("Your post has been created!")

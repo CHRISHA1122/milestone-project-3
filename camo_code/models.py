@@ -1,7 +1,8 @@
-from camo_code import db
+from camo_code import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from flask_wtf import FlaskForm
+from flask_login import UserMixin
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo
 
@@ -12,9 +13,8 @@ class User(db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    posts = db.relationship("Post", backref="author", lazy="dynamic")
+    posts = db.relationship("Code", backref="author", lazy="dynamic")
     comments = db.relationship("Comment", backref="author", lazy="dynamic")
-    profile = db.relationship("Profile", backref="user", uselist=False)
 
     def __repr__(self):
         return "<User {}>".format(self.username)
@@ -55,13 +55,27 @@ class Post(db.Model):
 class Comment(db.Model):
     # schema for the Comment model
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
+    body = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    code_id = db.Column(db.Integer, db.ForeignKey('code.id'))
 
     def __repr__(self):
         return '<Comment {}>'.format(self.body)
+
+
+class Code(db.Model):
+    # schema for the Code model
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    body = db.Column(db.Text, nullable=False)
+    language = db.Column(db.String(50), nullable=False)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    comments = db.relationship('Comment', backref='code', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Code {}>'.format(self.title)
 
 
 class RegistrationForm(FlaskForm):
@@ -72,3 +86,8 @@ class RegistrationForm(FlaskForm):
     password2 = PasswordField('Repeat Password', validators=[
         DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
+
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(int(id))
