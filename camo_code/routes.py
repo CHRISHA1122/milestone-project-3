@@ -132,3 +132,16 @@ def update_post(post_id):
         form.language.data = code.language
 
     return render_template("new_post.html", title="Update Post", form=form)
+
+
+@app.route("/post/<int:post_id>/delete", methods=["GET", "POST"])
+@login_required
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user:
+        flash("You do not have permission to delete this post.")
+        return redirect(url_for("post", post_id=post.id))
+    db.session.delete(post)
+    db.session.commit()
+    flash("Your post has been deleted.")
+    return redirect(url_for("home"))
