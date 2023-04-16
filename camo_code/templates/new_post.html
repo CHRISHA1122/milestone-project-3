@@ -1,5 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
 
+<div class="row">
+    <div class="col s12 m8 offset-m2">
+        <h3>New Post</h3>
+        <form method="POST" action="{{ url_for('new_post') }}">
+            {{ form.hidden_tag() }}
+            <div class="input-field">
+                {{ form.title.label() }}
+                {{ form.title(class_='validate') }}
+            </div>
+            <div class="input-field">
+                {{ form.body.label() }}
+                {{ form.body(class_='materialize-textarea validate') }}
+            </div>
+            <div class="card-action">
+                <button type="submit" class="btn green">Create Post</button>
+            </div>
+        </form>
+    </div>
+</div>
 
 {% endblock %}
