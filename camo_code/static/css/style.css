@@ -7,3 +7,28 @@ body {
   main {
     flex: 1 0 auto;
   }
+
+  .social {
+    list-style: none;
+    display: inline-block;
+  }
+
+  .social li {
+    display: inline-block;
+    margin-right: 2rem;
+  }
+
+  .social li:last-child {
+    margin-right: 0;
+  }
+
+  .social a {
+    display: block;
+    height: 5rem;
+    width: 5rem;
+  }
+
+  .social img {
+    height: 100%;
+    width: 100%;
+  }
