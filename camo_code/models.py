@@ -51,6 +51,11 @@ class Post(db.Model):
     def __repr__(self):
         return "<Post {}>".format(self.title)
 
+    def update(self, title, code_snippet):
+        self.title = title
+        self.code_snippet = code_snippet
+        db.session.commit()
+
 
 class Comment(db.Model):
     # schema for the Comment model

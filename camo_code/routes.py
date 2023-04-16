@@ -109,10 +109,26 @@ def update_post(post_id):
     if form.validate_on_submit():
         post.title = form.title.data
         post.body = form.body.data
+
+        # get the code associated with the post
+        code = post.codes.first()
+
+        # update the code information
+        code.title = form.code_title.data
+        code.body = form.code_body.data
+        code.language = form.language.data
+
         db.session.commit()
         flash("Your post has been updated!")
         return redirect(url_for("post", post_id=post.id))
     elif request.method == "GET":
         form.title.data = post.title
         form.body.data = post.body
+
+        # pre-populate form fields with existing code data
+        code = post.codes.first()
+        form.code_title.data = code.title
+        form.code_body.data = code.body
+        form.language.data = code.language
+
     return render_template("new_post.html", title="Update Post", form=form)
