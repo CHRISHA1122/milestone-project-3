@@ -3,20 +3,20 @@
 
 <div class="row">
     <div class="col s12 m8 offset-m2">
-        <h3>New Post</h3>
-        <form method="POST" action="{{ url_for('new_post') }}">
+        <h3>Edit Post</h3>
+        <form method="POST" action="{{ url_for('update_post', post_id=post.id) }}">
             {{ form.csrf_token }}
             {{ form.hidden_tag() }}
             <div class="input-field">
                 {{ form.title.label() }}
-                {{ form.title(class_='validate') }}
+                {{ form.title(class_='validate', value=post.title) }}
             </div>
             <div class="input-field">
                 {{ form.body.label() }}
-                {{ form.body(class_='materialize-textarea validate') }}
+                {{ form.body(class_='materialize-textarea validate', value=post.body) }}
             </div>
             <div class="card-action">
-                <button type="submit" class="btn green">Create Post</button>
+                <button type="submit" class="btn green">Update Post</button>
             </div>
         </form>
     </div>

@@ -96,3 +96,23 @@ def post(post_id):
         flash("Your comment has been added!")
         return redirect(url_for("post", post_id=post.id))
     return render_template("post.html", post=post, form=form)
+
+
+@app.route("/post/<int:post_id>", methods=["GET", "POST"])
+@login_required
+def update_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user:
+        flash("You do not have permission to update this post.")
+        return redirect(url_for("post", post_id=post.id))
+    form = PostForm()
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.body = form.body.data
+        db.session.commit()
+        flash("Your post has been updated!")
+        return redirect(url_for("post", post_id=post.id))
+    elif request.method == "GET":
+        form.title.data = post.title
+        form.body.data = post.body
+    return render_template("new_post.html", title="Update Post", form=form)

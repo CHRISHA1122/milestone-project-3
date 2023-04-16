@@ -59,7 +59,9 @@ class Comment(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
-    post = db.relationship('Post', backref=db.backref('comments', lazy=True))
+    code_id = db.Column(db.Integer, db.ForeignKey('code.id'), nullable=False)
+    post_relationship = db.relationship(
+        'Post', backref=db.backref('post_comments', lazy=True))
 
     def __repr__(self):
         return f"Comment('{self.body}', '{self.date_posted}')"
