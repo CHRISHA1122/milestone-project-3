@@ -3,11 +3,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from flask_wtf import FlaskForm
 from flask_login import UserMixin
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     # schema for the User model
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -86,14 +86,38 @@ class Code(db.Model):
         return '<Code {}>'.format(self.title)
 
 
+class Registration(db.Model):
+    # schema for the Registration model
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+    password_hash = db.Column(db.String(128))
+
+    def __repr__(self):
+        return "<Registration {}>".format(self.username)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+
 class RegistrationForm(FlaskForm):
-    # schema for the registration model
+    # schema for the registrationform model
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField('Repeat Password', validators=[
         DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
+
+    def save(self):
+        registration = Registration(
+            username=self.username.data, email=self.email.data)
+        registration.set_password(self.password.data)
+        db.session.add(registration)
+        db.session.commit()
 
 
 @login_manager.user_loader

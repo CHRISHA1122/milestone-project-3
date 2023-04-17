@@ -15,6 +15,9 @@ def home():
 @app.route("/profile")
 @login_required
 def profile():
+    if not current_user.is_active:
+        flash("You are logged out.")
+        return redirect(url_for("home"))
     return render_template("profile.html", current_user=current_user)
 
 
@@ -35,6 +38,8 @@ def login():
 
 @app.route("/logout")
 def logout():
+    current_user.is_active = False
+    db.session.commit()
     logout_user()
     return redirect(url_for("home"))
 
@@ -50,7 +55,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash("Congratulations, you are now a registered user!")
-        return redirect(url_for("login"))
+        return redirect(url_for("profile"))
     return render_template("register.html", title="Register", form=form)
 
 
@@ -100,7 +105,7 @@ def post(post_id):
 
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 @login_required
-def update_post(post_id):
+def update_post(posts_id):
     post = Post.query.get_or_404(post_id)
     if post.author != current_user:
         flash("You do not have permission to update this post.")
