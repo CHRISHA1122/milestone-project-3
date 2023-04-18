@@ -21,6 +21,23 @@ def profile():
     return render_template("profile.html", current_user=current_user)
 
 
+@app.route("/update_profile", methods=["GET", "POST"])
+@login_required
+def update_profile():
+    form = ProfileForm()
+    if form.validate_on_submit():
+        current_user.name = form.name.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash("Your profile has been updated!")
+        return redirect(url_for("profile"))
+    elif request.method == "GET":
+        form.name.data = current_user.name
+        form.email.data = current_user.email
+    return render_template(
+        "update_profile.html", title="Update Profile", form=form)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
@@ -103,9 +120,9 @@ def post(post_id):
     return render_template("post.html", post=post, form=form)
 
 
-@app.route("/post/<int:post_id>", methods=["GET", "POST"])
+@app.route("/update_post/<int:post_id>", methods=["GET", "POST"])
 @login_required
-def update_post(posts_id):
+def update_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post.author != current_user:
         flash("You do not have permission to update this post.")

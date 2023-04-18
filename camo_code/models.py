@@ -15,6 +15,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128))
     posts = db.relationship("Code", backref="author", lazy="dynamic")
     comments = db.relationship("Comment", backref="author", lazy="dynamic")
+    profile = db.relationship('Profile', backref='user', uselist=False)
 
     def __repr__(self):
         return "<User {}>".format(self.username)
