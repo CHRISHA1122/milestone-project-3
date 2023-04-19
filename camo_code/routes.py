@@ -28,16 +28,13 @@ def profile():
 def update_profile():
     form = ProfileForm()
     if form.validate_on_submit():
-        current_user.name = form.username.data
+        current_user.username = form.username.data
         current_user.email = form.email.data
-        if form.profile_pic.data:
-            picture_file = save_profile_picture(form.profile_pic.data)
-            current_user.profile.image_file = picture_file
         db.session.commit()
         flash("Your profile has been updated!")
         return redirect(url_for("profile"))
     elif request.method == "GET":
-        form.name.data = current_user.name
+        form.username.data = current_user.username
         form.email.data = current_user.email
     return render_template(
         "update_profile.html", title="Update Profile", form=form)
@@ -60,8 +57,6 @@ def login():
 
 @app.route("/logout")
 def logout():
-    current_user.is_active = False
-    db.session.commit()
     logout_user()
     return redirect(url_for("home"))
 
