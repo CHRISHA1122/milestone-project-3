@@ -12,8 +12,9 @@
                     <p>{{ post.content }}</p>
                 </div>
                 <div class="card-action">
-                    <a href="{{ url_for('user', username=post.author.username) }}">{{ post.author.username }}</a>
+                    <a href="{{ url_for('user', username=post.user_id.username) }}">{{ post.user_id.username }}</a>
                     <span class="right">{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                    <a href="{{ url_for('post', post_id=post.id) }}">Read More</a>
                 </div>
             </div>
             {% endfor %}

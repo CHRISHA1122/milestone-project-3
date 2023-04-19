@@ -13,7 +13,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    posts = db.relationship("Code", backref="author", lazy="dynamic")
+    posts = db.relationship("Post", backref="author", lazy="dynamic")
     comments = db.relationship("Comment", backref="author", lazy="dynamic")
     profile = db.relationship('Profile', backref='user', uselist=False)
 
@@ -44,6 +44,7 @@ class Post(db.Model):
     # schema for the Post model
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(140))
+    body = db.Column(db.String(280))
     code_snippet = db.Column(db.String(800))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
@@ -52,8 +53,9 @@ class Post(db.Model):
     def __repr__(self):
         return "<Post {}>".format(self.title)
 
-    def update(self, title, code_snippet):
+    def update(self, title, body, code_snippet):
         self.title = title
+        self.body = body
         self.code_snippet = code_snippet
         db.session.commit()
 

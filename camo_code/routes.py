@@ -3,7 +3,9 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from camo_code import app, db
 from camo_code.models import User, Post, Comment
-from camo_code.forms import LoginForm, RegistrationForm, UpdateProfileForm, PostForm
+from camo_code.forms import LoginForm, RegistrationForm, UpdateProfileForm
+from camo_code.forms import ProfileForm, PostForm, CommentForm
+from datetime import datetime
 
 
 @app.route("/")
@@ -26,8 +28,11 @@ def profile():
 def update_profile():
     form = ProfileForm()
     if form.validate_on_submit():
-        current_user.name = form.name.data
+        current_user.name = form.username.data
         current_user.email = form.email.data
+        if form.profile_pic.data:
+            picture_file = save_profile_picture(form.profile_pic.data)
+            current_user.profile.image_file = picture_file
         db.session.commit()
         flash("Your profile has been updated!")
         return redirect(url_for("profile"))
@@ -97,13 +102,18 @@ def user(username):
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(
-            title=form.title.data, body=form.body.data, author=current_user)
+        title = form.title.data
+        body = form.body.data
+        code_snippet = form.code_snippet.data
+        timestamp = datetime.utcnow()
+        user_id = current_user.id
+        post = Post(title=title, body=body, code_snippet=code_snippet,
+                    timestamp=timestamp, user_id=user_id)
         db.session.add(post)
         db.session.commit()
         flash("Your post has been created!")
         return redirect(url_for("home"))
-    return render_template("new_post.html", title="New Post", form=form)
+    return render_template("new_post.html", form=form)
 
 
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
@@ -111,13 +121,15 @@ def new_post():
 def post(post_id):
     post = Post.query.get_or_404(post_id)
     form = CommentForm()
+    comments = Comment.query.filter_by(post_id=post_id).all()
     if form.validate_on_submit():
-        comment = Comment(body=form.body.data, post=post, author=current_user)
+        comment = Comment(body=form.body.data, post=post, user=current_user)
         db.session.add(comment)
         db.session.commit()
         flash("Your comment has been added!")
         return redirect(url_for("post", post_id=post.id))
-    return render_template("post.html", post=post, form=form)
+    return render_template(
+        "post.html", post=post, form=form, comments=comments)
 
 
 @app.route("/update_post/<int:post_id>", methods=["GET", "POST"])

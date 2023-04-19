@@ -8,15 +8,19 @@
             {{ form.csrf_token }}
             {{ form.hidden_tag() }}
             <div class="input-field">
-                {{ form.title.label() }}
                 {{ form.title(class_='validate') }}
+                <label for="{{ form.title.id }}"><i class="fas fa-newspaper"></i> Title</label>
             </div>
             <div class="input-field">
-                {{ form.body.label() }}
                 {{ form.body(class_='materialize-textarea validate') }}
+                <label for="{{ form.body.id }}"><i class="fas fa-align-center"></i> Body</label>
+            </div>
+            <div class="input-field">
+                <label for="code_snippet"><i class="fas fa-code"></i> Code Snippet</label>
+                <textarea name="code_snippet" id="code_snippet" class="materialize-textarea validate"></textarea>
             </div>
             <div class="card-action">
-                <button type="submit" class="btn green">Create Post</button>
+                <button type="submit" class="btn waves-effect waves-light">Create Post</button>
             </div>
         </form>
     </div>
