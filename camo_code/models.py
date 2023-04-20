@@ -39,13 +39,18 @@ class Profile(db.Model):
     def __repr__(self):
         return "<Profile {}>".format(self.first_name)
 
+    def delete_profile(self):
+        db.session.delete(user)
+        db.session.commit()
+
 
 class Post(db.Model):
     # schema for the Post model
     id = db.Column(db.Integer, primary_key=True)
+    language = db.Column(db.String(50), nullable=False)
     title = db.Column(db.String(140))
     body = db.Column(db.String(280))
-    code_snippet = db.Column(db.String(800))
+    code_snippet = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     comments = db.relationship("Comment", backref="post", lazy="dynamic")
@@ -59,34 +64,30 @@ class Post(db.Model):
         self.code_snippet = code_snippet
         db.session.commit()
 
+    def formatted_code_snippet(self):
+        return Markup(f'<pre><code class="language-{self.language}">{self.code_snippet}</code></pre>')
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
 
 class Comment(db.Model):
     # schema for the Comment model
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
+    code_snippet = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
-    code_id = db.Column(db.Integer, db.ForeignKey('code.id'), nullable=False)
     post_relationship = db.relationship(
         'Post', backref=db.backref('post_comments', lazy=True))
 
     def __repr__(self):
         return f"Comment('{self.body}', '{self.date_posted}')"
 
-
-class Code(db.Model):
-    # schema for the Code model
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    body = db.Column(db.Text, nullable=False)
-    language = db.Column(db.String(50), nullable=False)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    comments = db.relationship('Comment', backref='code', lazy='dynamic')
-
-    def __repr__(self):
-        return '<Code {}>'.format(self.title)
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
 
 
 class Registration(db.Model):
