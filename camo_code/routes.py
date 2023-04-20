@@ -52,6 +52,17 @@ def update_profile():
         "update_profile.html", title="Update Profile", form=form)
 
 
+@app.route("/delete_profile", methods=["POST"])
+@login_required
+def delete_profile():
+    profile = current_user.profile
+    db.session.delete(profile)
+    db.session.commit()
+    logout_user()
+    flash('Your profile has been deleted.')
+    return redirect(url_for('home'))
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
