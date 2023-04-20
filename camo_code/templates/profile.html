@@ -37,7 +37,7 @@
           <p>{{ current_user.profile.first_name }} {{ current_user.profile.last_name }}</p>
           <p>{{ current_user.profile.bio }}</p>
           <p>{{ current_user.profile.location }}</p>
-          <a href="{{ url_for('update_profile') }}">Edit Profile</a>
+          <a href="{{ url_for('update_profile') }}" class="btn waves-effect waves-light">Edit Profile</a>
         </div>
       </div>
     </div>

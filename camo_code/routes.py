@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from camo_code import app, db
-from camo_code.models import User, Post, Comment
+from camo_code.models import User, Post, Comment, Profile
 from camo_code.forms import LoginForm, RegistrationForm, UpdateProfileForm
 from camo_code.forms import ProfileForm, PostForm, CommentForm
 from datetime import datetime
@@ -30,12 +30,27 @@ def update_profile():
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
-        db.session.commit()
-        flash("Your profile has been updated!")
-        return redirect(url_for("profile"))
+        profile = Profile.query.filter_by(user_id=current_user.id).first()
+        if not profile:
+            profile = Profile(user_id=current_user.id)
+            profile.first_name = form.first_name.data
+            profile.last_name = form.last_name.data
+            profile.bio = form.bio.data
+            profile.location = form.location.data
+            db.session.add(current_user)
+            db.session.add(profile)
+            db.session.commit()
+            flash("Your profile has been updated!")
+            return redirect(url_for("profile"))
     elif request.method == "GET":
         form.username.data = current_user.username
         form.email.data = current_user.email
+        profile = Profile.query.filter_by(user_id=current_user.id).first()
+        if profile:
+            form.first_name.data = profile.first_name
+            form.last_name.data = profile.last_name
+            form.bio.data = profile.bio
+            form.location.data = profile.location
     return render_template(
         "update_profile.html", title="Update Profile", form=form)
 
@@ -146,7 +161,7 @@ def update_post(post_id):
         code.title = form.code_title.data
         code.body = form.code_body.data
         code.language = form.language.data
-
+        post.code_snippet = form.code_snippet.data
         db.session.commit()
         flash("Your post has been updated!")
         return redirect(url_for("post", post_id=post.id))

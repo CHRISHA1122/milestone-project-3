@@ -10,15 +10,31 @@
                 <form method="POST" action="{{ url_for('update_profile') }}" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
                     <div class="input-field">
-                        {{ form.name(class_="validate") }}
-                        <label for="{{ form.name.id }}"><i class="fas fa-user"></i> Name</label>
+                        {{ form.first_name(class_="validate") }}
+                        <label for="{{ form.first_name.id }}"><i class="fas fa-user"></i> First Name</label>
+                    </div>
+                    <div class="input-field">
+                        {{ form.last_name(class_="validate") }}
+                        <label for="{{ form.last_name.id }}"><i class="fas fa-user"></i> Last Name</label>
+                    </div>
+                    <div class="input-field">
+                        {{ form.username(class_="validate") }}
+                        <label for="{{ form.username.id }}"><i class="fas fa-user"></i> Username</label>
                     </div>
                     <div class="input-field">
                         {{ form.email(class_="validate") }}
                         <label for="{{ form.email.id }}"><i class="fas fa-envelope"></i> Email</label>
                     </div>
+                    <div class="input-field">
+                        {{ form.bio(class_="validate") }}
+                        <label for="{{ form.bio.id }}"><i class="fas fa-info-circle"></i> Bio</label>
+                    </div>
+                    <div class="input-field">
+                        {{ form.location(class_="validate") }}
+                        <label for="{{ form.location.id }}"><i class="fas fa-map-marker"></i> Location</label>
+                    </div>
                     <div class="center-align">
-                        <button type="submit" class="btn waves-effect waves-light">Save Changes</button>
+                        {{ form.submit(class_='btn waves-effect waves-light') }}
                     </div>
                 </form>
             </div>

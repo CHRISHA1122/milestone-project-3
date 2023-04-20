@@ -4,7 +4,7 @@ from wtforms import TextAreaField, FileField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from flask_wtf.file import FileAllowed, FileRequired
 from flask_login import current_user
-from camo_code.models import User
+from camo_code.models import User, Profile
 
 
 class RegistrationForm(FlaskForm):
@@ -37,8 +37,12 @@ class LoginForm(FlaskForm):
 
 
 class UpdateProfileForm(FlaskForm):
+    first_name = StringField('First Name', validators=[DataRequired()])
+    last_name = StringField('Last Name', validators=[DataRequired()])
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
+    bio = TextAreaField('Bio')
+    location = StringField('Location')
     submit = SubmitField('Update')
 
     def validate_username(self, username):
@@ -57,9 +61,12 @@ class UpdateProfileForm(FlaskForm):
 
 
 class ProfileForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
+    first_name = StringField('First Name', validators=[DataRequired()])
+    last_name = StringField('Last Name', validators=[DataRequired()])
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
+    bio = TextAreaField('Bio')
+    location = StringField('Location')
     submit = SubmitField('Update')
 
     def validate_username(self, username):
