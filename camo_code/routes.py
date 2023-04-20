@@ -28,29 +28,26 @@ def profile():
 def update_profile():
     form = ProfileForm()
     if form.validate_on_submit():
-        current_user.username = form.username.data
+        current_user.profile.first_name = form.first_name.data
+        current_user.profile.last_name = form.last_name.data
+        current_user.profile.user.username = form.username.data
         current_user.email = form.email.data
-        profile = Profile.query.filter_by(user_id=current_user.id).first()
-        if not profile:
-            profile = Profile(user_id=current_user.id)
-            profile.first_name = form.first_name.data
-            profile.last_name = form.last_name.data
-            profile.bio = form.bio.data
-            profile.location = form.location.data
-            db.session.add(current_user)
-            db.session.add(profile)
-            db.session.commit()
-            flash("Your profile has been updated!")
-            return redirect(url_for("profile"))
+        current_user.profile.bio = form.bio.data
+        current_user.profile.location = form.location.data
+        db.session.commit()
+        flash("Your profile has been updated!")
+        return redirect(url_for("profile", username=current_user.username))
     elif request.method == "GET":
         form.username.data = current_user.username
         form.email.data = current_user.email
         profile = Profile.query.filter_by(user_id=current_user.id).first()
         if profile:
-            form.first_name.data = profile.first_name
-            form.last_name.data = profile.last_name
-            form.bio.data = profile.bio
-            form.location.data = profile.location
+            form.first_name.data = current_user.profile.first_name
+            form.last_name.data = current_user.profile.last_name
+            form.username.data = current_user.profile.user.username
+            form.email.data = current_user.email
+            form.bio.data = current_user.profile.bio
+            form.location.data = current_user.profile.location
     return render_template(
         "update_profile.html", title="Update Profile", form=form)
 
