@@ -55,9 +55,9 @@ def update_profile():
 @app.route("/delete_profile", methods=["POST"])
 @login_required
 def delete_profile():
-    profile = current_user.profile
-    db.session.delete(profile)
-    db.session.commit()
+    if current_user.profile:
+        db.session.delete(current_user.profile)
+        db.session.commit()
     logout_user()
     flash('Your profile has been deleted.')
     return redirect(url_for('home'))
@@ -95,7 +95,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash("Congratulations, you are now a registered user!")
-        return redirect(url_for("profile"))
+        return redirect(url_for("home"))
     return render_template("register.html", title="Register", form=form)
 
 

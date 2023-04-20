@@ -122,6 +122,10 @@ class RegistrationForm(FlaskForm):
         db.session.add(registration)
         db.session.commit()
 
+        login_user(registration)
+
+        return redirect(url_for('profile'))
+
 
 @login_manager.user_loader
 def load_user(id):
