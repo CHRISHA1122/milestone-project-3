@@ -17,9 +17,6 @@ def home():
 @app.route("/profile")
 @login_required
 def profile():
-    if not current_user.is_active:
-        flash("You are logged out.")
-        return redirect(url_for("home"))
     return render_template("profile.html", current_user=current_user)
 
 
@@ -28,12 +25,21 @@ def profile():
 def update_profile():
     form = ProfileForm()
     if form.validate_on_submit():
-        current_user.profile.first_name = form.first_name.data
-        current_user.profile.last_name = form.last_name.data
-        current_user.profile.user.username = form.username.data
-        current_user.email = form.email.data
-        current_user.profile.bio = form.bio.data
-        current_user.profile.location = form.location.data
+        if current_user.profile:
+            current_user.profile.first_name = form.first_name.data
+            current_user.profile.last_name = form.last_name.data
+            current_user.username = form.username.data
+            current_user.email = form.email.data
+            current_user.profile.bio = form.bio.data
+            current_user.profile.location = form.location.data
+        else:
+            profile = Profile(first_name=form.first_name.data,
+                              last_name=form.last_name.data,
+                              user_id=current_user.id,
+                              bio=form.bio.data,
+                              location=form.location.data)
+            current_user.username = form.username.data
+            db.session.add(profile)
         db.session.commit()
         flash("Your profile has been updated!")
         return redirect(url_for("profile", username=current_user.username))
@@ -42,12 +48,11 @@ def update_profile():
         form.email.data = current_user.email
         profile = Profile.query.filter_by(user_id=current_user.id).first()
         if profile:
-            form.first_name.data = current_user.profile.first_name
-            form.last_name.data = current_user.profile.last_name
-            form.username.data = current_user.profile.user.username
+            form.first_name.data = profile.first_name
+            form.last_name.data = profile.last_name
             form.email.data = current_user.email
-            form.bio.data = current_user.profile.bio
-            form.location.data = current_user.profile.location
+            form.bio.data = profile.bio
+            form.location.data = profile.location
     return render_template(
         "update_profile.html", title="Update Profile", form=form)
 
@@ -157,7 +162,7 @@ def update_post(post_id):
     if post.author != current_user:
         flash("You do not have permission to update this post.")
         return redirect(url_for("post", post_id=post.id))
-    form = PostForm()
+        form = PostForm()
     if form.validate_on_submit():
         post.title = form.title.data
         post.body = form.body.data

@@ -5,6 +5,7 @@ from flask_wtf import FlaskForm
 from flask_login import UserMixin
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo
+import psycopg2
 
 
 class User(db.Model, UserMixin):
@@ -14,7 +15,6 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     posts = db.relationship("Post", backref="author", lazy="dynamic")
-    comments = db.relationship("Comment", backref="author", lazy="dynamic")
     profile = db.relationship('Profile', backref='user', uselist=False)
 
     def __repr__(self):
@@ -40,7 +40,7 @@ class Profile(db.Model):
         return "<Profile {}>".format(self.first_name)
 
     def delete_profile(self):
-        db.session.delete(user)
+        db.session.delete(self)
         db.session.commit()
 
 
@@ -117,6 +117,18 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
     def save(self):
+        existing_user = Registration.query.filter_by(
+            username=self.username.data).first()
+        if existing_user:
+            flash('A user with that username already exists.')
+        return False
+
+        existing_email = Registration.query.filter_by(
+            email=self.email.data).first()
+        if existing_email:
+            flash('A user with that email already exists.')
+        return False
+
         registration = Registration(
             username=self.username.data, email=self.email.data)
         registration.set_password(self.password.data)
