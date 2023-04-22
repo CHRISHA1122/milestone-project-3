@@ -18,15 +18,13 @@
             {% for post in posts %}
             <div class="card">
                 <div class="card-content">
+                    <p class="grey-text">{{ post.user_id.username }}</p>
                     <span class="card-title">{{ post.title }}</span>
                     <p>{{ post.body }}</p>
                     {% if post.code_snippet %}
                     <pre><code class="language-{{ post.code_snippet_language }} line-numbers">{{ post.code_snippet }}</code></pre>
                     {% endif %}
-                </div>
-                <div class="card-action">
-                    <a href="{{ url_for('user', username=post.user_id.username) }}">{{ post.user_id.username }}</a>
-                    <span class="right">{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                    <span class="right">{{ post.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
                     <a href="{{ url_for('post', post_id=post.id) }}">Read More</a>
                 </div>
             </div>

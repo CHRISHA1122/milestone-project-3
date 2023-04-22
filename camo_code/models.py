@@ -67,6 +67,11 @@ class Post(db.Model):
     def formatted_code_snippet(self):
         return Markup(f'<pre><code class="language-{self.language}">{self.code_snippet}</code></pre>')
 
+    def add_comment(self, body, code_snippet):
+        comment = Comment(body=body, code_snippet=code_snippet, post=self)
+        db.session.add(comment)
+        db.session.commit()
+
     def delete(self):
         db.session.delete(self)
         db.session.commit()

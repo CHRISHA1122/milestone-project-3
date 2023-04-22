@@ -16,7 +16,19 @@
         <div class="col s12 m8 offset-m2">
             <h3>{{ post.title }}</h3>
             <p>{{ post.body }}</p>
-            <p class="grey-text">Posted by {{ post.user_id.username }} on {{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            {% if post.code_snippet %}
+            <pre><code class="language-{{ post.code_snippet_language }} line-numbers">{{ post.code_snippet }}</code></pre>
+            {% endif %}
+            <p class="grey-text">{{ post.user_id.username }} :
+                {{ post.timestamp.strftime('%Y-%m-%d %H:%M') }}</p>
+            {% if post.author == current_user %}
+            <div>
+            <a href="{{ url_for('update_post', post_id=post.id) }}" class="btn waves-effect waves-light">Edit</a>
+            <form action="{{ url_for('delete_post', post_id=post.id) }}" method="post" style="display: inline-block">
+                <button type="submit" class="btn waves-effect waves-light red" onclick="return confirm('Are you sure?')">Delete</button>
+              </form>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
