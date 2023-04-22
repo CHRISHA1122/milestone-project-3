@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms import TextAreaField, FileField
+from wtforms import TextAreaField, FileField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from flask_wtf.file import FileAllowed, FileRequired
 from flask_login import current_user
@@ -87,8 +87,12 @@ class ProfileForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     body = TextAreaField('Body', validators=[DataRequired()])
-    code_snippet = TextAreaField('Code Snippet')
-    submit = SubmitField('Post')
+    code_snippet_language = SelectField('Code Snippet Language', choices=[
+        ('markup', 'Markup'), ('css', 'CSS'), ('python', 'Python'),
+        ('javascript', 'JavaScript'), ('ruby', 'Ruby')])
+    code_snippet = TextAreaField(
+        'Code Snippet', render_kw={"class": "materialize-textarea validate", "data-language": "python"})
+    submit = SubmitField('Create Post')
 
 
 class CommentForm(FlaskForm):

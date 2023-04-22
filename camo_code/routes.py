@@ -125,13 +125,12 @@ def user(username):
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        title = form.title.data
-        body = form.body.data
-        code_snippet = form.code_snippet.data
-        timestamp = datetime.utcnow()
-        user_id = current_user.id
-        post = Post(title=title, body=body, code_snippet=code_snippet,
-                    timestamp=timestamp, user_id=user_id)
+        post = Post(language=form.code_snippet_language.data,
+                    title=form.title.data,
+                    body=form.body.data,
+                    code_snippet=form.code_snippet.data,
+                    timestamp=datetime.utcnow(),
+                    user_id=current_user.id)
         db.session.add(post)
         db.session.commit()
         flash("Your post has been created!")
@@ -160,33 +159,24 @@ def post(post_id):
 def update_post(post_id):
     post = Post.query.get_or_404(post_id)
     if post.author != current_user:
+        abort(403)
         flash("You do not have permission to update this post.")
         return redirect(url_for("post", post_id=post.id))
-        form = PostForm()
+    form = PostForm()
     if form.validate_on_submit():
+        post.language = form.code_snippet_language.data
         post.title = form.title.data
         post.body = form.body.data
-
-        # get the code associated with the post
-        code = post.codes.first()
-
-        # update the code information
-        code.title = form.code_title.data
-        code.body = form.code_body.data
-        code.language = form.language.data
         post.code_snippet = form.code_snippet.data
+        post.timestamp = datetime.utcnow()
         db.session.commit()
         flash("Your post has been updated!")
         return redirect(url_for("post", post_id=post.id))
     elif request.method == "GET":
+        form.code_snippet_language.data = post.language
         form.title.data = post.title
         form.body.data = post.body
-
-        # pre-populate form fields with existing code data
-        code = post.codes.first()
-        form.code_title.data = code.title
-        form.code_body.data = code.body
-        form.language.data = code.language
+        form.code_snippet.data = post.code_snippet
 
     return render_template("new_post.html", title="Update Post", form=form)
 

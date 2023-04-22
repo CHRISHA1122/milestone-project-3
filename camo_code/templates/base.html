@@ -6,8 +6,6 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Link for Prismjs -->
-  <link href="//cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
   <!-- Link for Fontawesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
@@ -16,6 +14,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     type="text/css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
+  <!-- Link for Prismjs -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/prism.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/prism-autoloader.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/prism-line-highlight.css') }}" type="text/css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/prism-show-language.css') }}" type="text/css">
+  <script>
+    // Initialize Highlight.js
+    hljs.initHighlightingOnLoad();
+  </script>
   <title>CAMO_CODE</title>
 </head>
 
@@ -86,11 +94,28 @@
     </div>
   </footer>
 
-  <!-- Link for Materialize JS -->
+  <!-- Script for Materialize JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-  <!-- Link for Prismjs -->
+  <!-- Script for Prismjs -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="{{ url_for('static', filename='js/prism.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/prism-autoloader.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/prism-line-highlight.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/prism-show-language.js') }}"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const codeSnippetTextarea = document.getElementById("code_snippet");
+        const codeSnippetDisplay = document.getElementById("code_snippet_display");
+        codeSnippetTextarea.addEventListener("input", function() {
+            codeSnippetDisplay.textContent = codeSnippetTextarea.value;
+            Prism.highlightAll();
+        });
+    });
+  </script>
+
 </body>
 
 </html>

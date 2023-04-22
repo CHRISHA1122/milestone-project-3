@@ -2,14 +2,14 @@
 {% block content %}
 
 {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li class="alert-warning">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li class="alert-warning">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
 <!-- Home Page -->
 <div class="container">
     <div class="row">
@@ -19,7 +19,10 @@
             <div class="card">
                 <div class="card-content">
                     <span class="card-title">{{ post.title }}</span>
-                    <p>{{ post.content }}</p>
+                    <p>{{ post.body }}</p>
+                    {% if post.code_snippet %}
+                    <pre><code class="language-{{ post.code_snippet_language }} line-numbers">{{ post.code_snippet }}</code></pre>
+                    {% endif %}
                 </div>
                 <div class="card-action">
                     <a href="{{ url_for('user', username=post.user_id.username) }}">{{ post.user_id.username }}</a>

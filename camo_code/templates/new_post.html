@@ -2,14 +2,14 @@
 {% block content %}
 
 {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
-                {% for message in messages %}
-                    <li class="alert-warning">{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li class="alert-warning">{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
 <!-- New Post -->
 <div class="row">
     <div class="col s12 m8 offset-m2">
@@ -26,9 +26,24 @@
                 <label for="{{ form.body.id }}"><i class="fas fa-align-center"></i> Body</label>
             </div>
             <div class="input-field">
-                <label for="code_snippet"><i class="fas fa-code"></i> Code Snippet</label>
-                <textarea name="code_snippet" id="code_snippet" class="materialize-textarea validate"></textarea>
+                <label for="code_snippet_language"><i class="fas fa-code"></i> Choose Language</label>
+                <select name="code_snippet_language" id="code_snippet_language" class="dropdown">
+                    <option value="" disabled selected>Choose Language</option>
+                    <option value="markup">Markup</option>
+                    <option value="css">CSS</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="ruby">Ruby</option>
+                    <!-- Add more options for other supported languages -->
+                </select>
             </div>
+            <div class="input-field">
+                <pre><code id="code_snippet_display" class="language-{{ form.code_snippet_language.data }} line-numbers normalize-whitespace"></code></pre>
+                <div>
+                    <label for="code_snippet"><i class="fas fa-code"></i> Code Snippet</label>
+                    <textarea name="code_snippet" id="code_snippet" class="materialize-textarea validate" data-language="{{ form.code_snippet_language.data }}"></textarea>
+                </div>
+            </div>            
             <div class="card-action">
                 <button type="submit" class="btn waves-effect waves-light">Create Post</button>
             </div>

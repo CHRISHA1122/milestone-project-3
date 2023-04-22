@@ -31,7 +31,10 @@
       <div class="card">
         <div class="card-content">
           <span class="card-title">{{ post.title }}</span>
-          <p>{{ post.code_snippet }}</p>
+          <p>{{ post.body }}</p>
+          {% if post.code_snippet %}
+          <pre><code class="language-{{ post.code_snippet_language }} line-numbers">{{ post.code_snippet }}</code></pre>
+          {% endif %}
         </div>
         <div class="card-action">
           <a href="{{ url_for('post', post_id=post.id) }}">View</a>
