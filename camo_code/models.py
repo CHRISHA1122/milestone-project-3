@@ -47,10 +47,10 @@ class Profile(db.Model):
 class Post(db.Model):
     # schema for the Post model
     id = db.Column(db.Integer, primary_key=True)
-    language = db.Column(db.String(50), nullable=False)
     title = db.Column(db.String(140))
     body = db.Column(db.String(280))
     code_snippet = db.Column(db.Text)
+    code_snippet_language = db.Column(db.String(20))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     comments = db.relationship("Comment", backref="post", lazy="dynamic")
@@ -58,14 +58,14 @@ class Post(db.Model):
     def __repr__(self):
         return "<Post {}>".format(self.title)
 
-    def update(self, title, body, code_snippet):
+    def update(self, title, body, code_snippet, code_snippet_language):
         self.title = title
         self.body = body
         self.code_snippet = code_snippet
-        db.session.commit()
+        self.code_snippet_language = code_snippet_language
 
     def formatted_code_snippet(self):
-        return Markup(f'<pre><code class="language-{self.language}">{self.code_snippet}</code></pre>')
+        return Markup(f'<pre><code class="language-{self.code_snippet_language}">{self.code_snippet}</code></pre>')
 
     def add_comment(self, body, code_snippet):
         comment = Comment(body=body, code_snippet=code_snippet, post=self)
@@ -84,8 +84,6 @@ class Comment(db.Model):
     code_snippet = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
-    post_relationship = db.relationship(
-        'Post', backref=db.backref('post_comments', lazy=True))
 
     def __repr__(self):
         return f"Comment('{self.body}', '{self.date_posted}')"

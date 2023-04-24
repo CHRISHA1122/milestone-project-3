@@ -6,6 +6,8 @@ from camo_code.models import User, Post, Comment, Profile
 from camo_code.forms import LoginForm, RegistrationForm, UpdateProfileForm
 from camo_code.forms import ProfileForm, PostForm, CommentForm
 from datetime import datetime
+import logging
+from pprint import pprint
 
 
 @app.route("/")
@@ -125,7 +127,7 @@ def user(username):
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(language=form.code_snippet_language.data,
+        post = Post(code_snippet_language=form.code_snippet_language.data,
                     title=form.title.data,
                     body=form.body.data,
                     code_snippet=form.code_snippet.data,
@@ -154,31 +156,27 @@ def post(post_id):
         "post.html", post=post, form=form, comments=comments)
 
 
-@app.route("/update_post/<int:post_id>", methods=["GET", "POST"])
+@app.route("/post/<int:post_id>/update", methods=["GET", "POST"])
 @login_required
 def update_post(post_id):
     post = Post.query.get_or_404(post_id)
-    if post.author != current_user:
-        abort(403)
-        flash("You do not have permission to update this post.")
-        return redirect(url_for("post", post_id=post.id))
-    form = PostForm()
+    form = PostForm(obj=post)
     if form.validate_on_submit():
-        post.language = form.code_snippet_language.data
         post.title = form.title.data
         post.body = form.body.data
         post.code_snippet = form.code_snippet.data
-        post.timestamp = datetime.utcnow()
+        code_snippet_language = form.code_snippet_language.data
         db.session.commit()
         flash("Your post has been updated!")
         return redirect(url_for("post", post_id=post.id))
     elif request.method == "GET":
-        form.code_snippet_language.data = post.language
         form.title.data = post.title
         form.body.data = post.body
-        form.code_snippet.data = post.code_snippet
+        form.code_snippet.data = post.code_snippet or ''
+        form.code_snippet_language.data = post.code_snippet_language
 
-    return render_template("new_post.html", title="Update Post", form=form)
+    return render_template(
+        "update_post.html", title="Update Post", post=post, form=form)
 
 
 @app.route("/post/<int:post_id>/delete", methods=["GET", "POST"])

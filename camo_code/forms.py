@@ -92,7 +92,7 @@ class PostForm(FlaskForm):
         ('javascript', 'JavaScript'), ('ruby', 'Ruby')])
     code_snippet = TextAreaField(
         'Code Snippet', render_kw={"class": "materialize-textarea validate", "data-language": "python"})
-    submit = SubmitField('Create Post')
+    submit = SubmitField('Update')
 
 
 class CommentForm(FlaskForm):

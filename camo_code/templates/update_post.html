@@ -13,23 +13,30 @@
 <!-- Update Post -->
 <div class="row">
     <div class="col s12 m8 offset-m2">
-        <h3>Edit Post</h3>
-        <form method="POST" action="{{ url_for('update_post', post_id=post.id) }}">
-            {{ form.csrf_token }}
-            {{ form.hidden_tag() }}
-            <div class="input-field">
-                {{ form.title.label() }}
-                {{ form.title(class_='validate', value=post.title) }}
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title center-align">Edit Post</span>
+                <form method="POST" action="{{ url_for('update_post', post_id=post.id) }}">
+                    {{ form.csrf_token }}
+                    {{ form.hidden_tag() }}
+                    <div class="input-field">
+                        {{ form.title(class_="materialize-textarea") }}
+                    </div>
+                    <div class="input-field">
+                        {{ form.body(class_="materialize-textarea") }}
+                    </div>
+                    <div class="input-field">
+                        <pre><code class="language-{{ post.code_snippet_language }} line-numbers">{{ form.code_snippet.data }}</code></pre>
+                        {{ form.code_snippet(class_="materialize-textarea") }}
+                    </div>
+                    <div class="card-action">
+                        <button type="submit" class="btn waves-effect waves-light">Update Post</button>
+                    </div>
+                </form>
             </div>
-            <div class="input-field">
-                {{ form.body.label() }}
-                {{ form.body(class_='materialize-textarea validate', value=post.body) }}
-            </div>
-            <div class="card-action">
-                <button type="submit" class="btn green">Update Post</button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
+
 
 {% endblock %}
