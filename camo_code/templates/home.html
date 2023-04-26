@@ -25,7 +25,7 @@
                     <pre><code class="language-{{ post.code_snippet_language }} line-numbers">{{ post.code_snippet }}</code></pre>
                     {% endif %}
                     <span class="right">{{ post.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
-                    <a href="{{ url_for('post', post_id=post.id) }}" style="color: #2BBBAD; text-transform: uppercase;">View</a>
+                    <a href="{{ url_for('post', post_id=post.id) }}" style="color: black; text-transform: uppercase;">View</a>
                 </div>
             </div>
             {% endfor %}
