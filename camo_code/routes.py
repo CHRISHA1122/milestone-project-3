@@ -1,3 +1,4 @@
+# Imports for App
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -10,18 +11,21 @@ import logging
 from pprint import pprint
 
 
+# Route for Home
 @app.route("/")
 def home():
     posts = Post.query.order_by(Post.timestamp.desc()).all()
     return render_template("home.html", posts=posts)
 
 
+# Route for Profile
 @app.route("/profile")
 @login_required
 def profile():
     return render_template("profile.html", current_user=current_user)
 
 
+# Route for Update Profile
 @app.route("/update_profile", methods=["GET", "POST"])
 @login_required
 def update_profile():
@@ -59,6 +63,7 @@ def update_profile():
         "update_profile.html", title="Update Profile", form=form)
 
 
+# Route for Delete Profile
 @app.route("/delete_profile", methods=["POST"])
 @login_required
 def delete_profile():
@@ -70,6 +75,7 @@ def delete_profile():
     return redirect(url_for('home'))
 
 
+# Route for LogIn
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
@@ -85,12 +91,14 @@ def login():
     return render_template("login.html", title="Sign In", form=form)
 
 
+# Route for LogOut
 @app.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for("home"))
 
 
+# Route for Register
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
@@ -106,6 +114,7 @@ def register():
     return render_template("register.html", title="Register", form=form)
 
 
+# Route for User
 @app.route("/user/<username>", methods=["GET", "POST"])
 @login_required
 def user(username):
@@ -122,6 +131,7 @@ def user(username):
     return render_template("user.html", user=user, form=form)
 
 
+# Route for New Post
 @app.route("/post/new", methods=["GET", "POST"])
 @login_required
 def new_post():
@@ -140,6 +150,7 @@ def new_post():
     return render_template("new_post.html", form=form)
 
 
+# Route for Post
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
 @login_required
 def post(post_id):
@@ -156,6 +167,7 @@ def post(post_id):
         "post.html", title=post.title, post=post, form=form, comments=comments)
 
 
+# Route for Update Post
 @app.route("/post/<int:post_id>/update", methods=["GET", "POST"])
 @login_required
 def update_post(post_id):
@@ -179,6 +191,7 @@ def update_post(post_id):
         "update_post.html", title="Update Post", post=post, form=form)
 
 
+# Route for Delete Post
 @app.route("/post/<int:post_id>/delete", methods=["GET", "POST"])
 @login_required
 def delete_post(post_id):
@@ -192,6 +205,7 @@ def delete_post(post_id):
     return redirect(url_for("home"))
 
 
+# Route for Comment
 @app.route("/post/<int:post_id>/comment", methods=["GET", "POST"])
 @login_required
 def comment(post_id):
@@ -205,4 +219,5 @@ def comment(post_id):
         db.session.commit()
         flash('Your comment has been added.')
         return redirect(url_for('post', post_id=post_id))
-    return render_template('comment.html', title='Add Comment', form=form, post=post)
+    return render_template(
+        'comment.html', title='Add Comment', form=form, post=post)

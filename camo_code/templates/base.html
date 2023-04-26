@@ -2,10 +2,12 @@
 <html lang="en">
 
 <!-- Base HTML -->
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Post and share your code snippets easily with CamoCode">
   <!-- Link for Fontawesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
@@ -30,7 +32,7 @@
 <body>
 
   <header>
-    <!-- top navbar -->
+    <!-- Used Materialize navbar, modified and styled to suit needs -->
     <nav class="grey darken-3">
       <div class="nav-wrapper">
         <a href="{{ url_for('home') }}" class="brand-logo">CAMO_CODE</a>
@@ -60,40 +62,43 @@
     </ul>
   </header>
 
+  <!-- Main content container -->
   <main class="container">
     {% block content %}
     {% endblock %}
   </main>
 
+  <!-- Used Materialize for footer, modified and styled to suit needs -->
   <footer class="page-footer grey darken-3">
     <div class="container">
       <div class="row">
         <div class="col l6 s12">
-          <h4 class="white-text center-align">CAMO_CODE</h4>
-          <p class="white-text text-lighten-4 center-align" style="font-size: 1.5rem; display: block; text-transform: uppercase;">
+          <h3 class="white-text center-align">CAMO_CODE</h3>
+          <p class="white-text text-lighten-4 center-align"
+            style="font-size: 1.5rem; display: block; text-transform: uppercase;">
             When the solution is infront of you but you just can't see it.</p>
         </div>
         <div class="col l4 offset-l2 s12">
           <h4 class="white-text center-align" style="text-transform: uppercase;">Find Us On</h4>
           <ul class="social">
             <li><a href="https://www.facebook.com/" target="_blank">
-              <img src="{{ url_for('static', filename='img/facebook-logo.png') }}" alt="Facebook">
-            </a>
+                <img src="{{ url_for('static', filename='img/facebook-logo.png') }}" alt="Facebook">
+              </a>
             </li>
             <li><a href="https://github.com/" target="_blank">
-              <img src="{{ url_for('static', filename='img/github-logo.png') }}" alt="GitHub">
-            </a>
+                <img src="{{ url_for('static', filename='img/github-logo.png') }}" alt="GitHub">
+              </a>
             </li>
             <li><a href="https://www.linkedin.com/" target="_blank">
-              <img src="{{ url_for('static', filename='img/linkedin-logo.png') }}" alt="LinkedIn">
-            </a>
+                <img src="{{ url_for('static', filename='img/linkedin-logo.png') }}" alt="LinkedIn">
+              </a>
             </li>
           </ul>
         </div>
       </div>
     </div>
     <div class="footer-copyright">
-      <div class="container center-align" style="font-size: 1.2rem;">
+      <div class="container center-align" style="font-size: 1.3rem;">
         FOR EDUCATIONAL PURPOSES ONLY
       </div>
     </div>
@@ -109,23 +114,24 @@
   <script src="{{ url_for('static', filename='js/prism.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/prism_autoloader_highlight.min.js') }}"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const codeSnippetTextarea = document.getElementById("code_snippet");
-        const codeSnippetDisplay = document.getElementById("code_snippet_display");
-        codeSnippetTextarea.addEventListener("input", function() {
-            codeSnippetDisplay.textContent = codeSnippetTextarea.value;
-            Prism.highlightAll();
-        });
-        function updateCodeSnippetDisplay() {
+    document.addEventListener("DOMContentLoaded", function () {
+      const codeSnippetTextarea = document.getElementById("code_snippet");
+      const codeSnippetDisplay = document.getElementById("code_snippet_display");
+      codeSnippetTextarea.addEventListener("input", function () {
+        codeSnippetDisplay.textContent = codeSnippetTextarea.value;
+        Prism.highlightAll();
+      });
+
+      function updateCodeSnippetDisplay() {
         codeSnippetDisplay.textContent = codeSnippet.value;
         Prism.highlightElement(codeSnippetDisplay);
-    }
+      }
 
-    codeSnippet.addEventListener('input', function() {
+      codeSnippet.addEventListener('input', function () {
         updateCodeSnippetDisplay();
-    });
+      });
 
-    updateCodeSnippetDisplay();
+      updateCodeSnippetDisplay();
     });
   </script>
 

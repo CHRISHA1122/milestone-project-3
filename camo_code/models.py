@@ -1,15 +1,17 @@
+# Imports for App
 from camo_code import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from flask_wtf import FlaskForm
 from flask_login import UserMixin
-from wtforms import StringField, TextAreaField, PasswordField, SubmitField, SelectField, BooleanField
+from wtforms import StringField, TextAreaField, PasswordField
+from wtforms import SubmitField, SelectField, BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo
 import psycopg2
 
 
+# Schema for the User Model
 class User(db.Model, UserMixin):
-    # schema for the User model
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
@@ -27,8 +29,14 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
 
+# Schema for the LoadUser Model
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(int(id))
+
+
+# Schema for the Profile Model
 class Profile(db.Model):
-    # schema for the Profile model
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(64))
     last_name = db.Column(db.String(64))
@@ -44,15 +52,16 @@ class Profile(db.Model):
         db.session.commit()
 
 
+# Schema for the Post Model
 class Post(db.Model):
-    # schema for the Post model
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(140))
     body = db.Column(db.String(280))
     code_snippet = db.Column(db.Text)
     code_snippet_language = db.Column(db.String(20))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"))
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        "user.id", ondelete="CASCADE"))
     comments = db.relationship("Comment", backref="post", lazy="dynamic")
 
     def __repr__(self):
@@ -65,7 +74,8 @@ class Post(db.Model):
         self.code_snippet_language = code_snippet_language
 
     def formatted_code_snippet(self):
-        return Markup(f'<pre><code class="language-{self.code_snippet_language}">{self.code_snippet}</code></pre>')
+        return Markup(
+            f'<pre><code class="language-{self.code_snippet_language}">{self.code_snippet}</code></pre>')
 
     def add_comment(self, body, code_snippet):
         comment = Comment(body=body, code_snippet=code_snippet, post=self)
@@ -78,15 +88,17 @@ class Post(db.Model):
             db.session.commit()
 
 
+# Schema for the Comment Model
 class Comment(db.Model):
-    # schema for the Comment model
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     code_snippet = db.Column(db.Text)
     code_snippet_language = db.Column(db.String(50))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    post_id = db.Column(db.Integer, db.ForeignKey("post.id", ondelete="CASCADE"), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"))
+    post_id = db.Column(db.Integer, db.ForeignKey(
+        "post.id", ondelete="CASCADE"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        "user.id", ondelete="CASCADE"))
 
     def __repr__(self):
         return f"Comment('{self.body}', '{self.date_posted}')"
@@ -97,6 +109,7 @@ class Comment(db.Model):
             db.session.commit()
 
 
+# Schema for the Comment Form
 class CommentForm(FlaskForm):
     body = StringField('Comment', validators=[DataRequired()])
     code_snippet = TextAreaField('Code Snippet')
@@ -111,8 +124,8 @@ class CommentForm(FlaskForm):
     submit = SubmitField('Comment')
 
 
+# Schema for the Registration Model
 class Registration(db.Model):
-    # schema for the Registration model
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
@@ -128,8 +141,8 @@ class Registration(db.Model):
         return check_password_hash(self.password_hash, password)
 
 
+# Schema for the Registration Form Model
 class RegistrationForm(FlaskForm):
-    # schema for the registrationform model
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -159,8 +172,3 @@ class RegistrationForm(FlaskForm):
         login_user(registration)
 
         return redirect(url_for('profile'))
-
-
-@login_manager.user_loader
-def load_user(id):
-    return User.query.get(int(id))
