@@ -17,6 +17,7 @@
       {% if current_user.is_authenticated %}
       <h1>Welcome, {{ current_user.username }}!</h1>
       <a href="{{ url_for('logout') }}" class="btn waves-effect waves-light">Log out</a>
+      <h4 style="text-transform: uppercase;">Your Posts</h4>
       {% else %}
       <h1>Anonymous User</h1>
       <p>Sign up or log in to access your profile!</p>
@@ -37,7 +38,7 @@
           {% endif %}
         </div>
         <div class="card-action">
-          <a href="{{ url_for('post', post_id=post.id) }}">View</a>
+          <a href="{{ url_for('post', post_id=post.id) }}" style="color: #2BBBAD;">View</a>
         </div>
       </div>
       {% endfor %}

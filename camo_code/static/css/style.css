@@ -2,10 +2,21 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  background-color: #D3D3D3;
+  margin: 0;
+  padding: 0;
 }
 
 main {
   flex: 1 0 auto;
+}
+
+li a {
+  text-transform: uppercase;
+}
+
+.card-title {
+  text-transform: uppercase;
 }
 
 .social {

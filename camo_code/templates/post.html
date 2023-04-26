@@ -50,8 +50,8 @@
                     <ul class="collection">
                         {% for comment in comments %}
                         <li class="collection-item">
-                            <span class="bold">{{ comment.body }}</span>
-                            
+                            <span class="bold">{{ comment.user.username }}:</span>
+                            <p>{{ comment.body }}</p>
                         </li>
                         {% endfor %}
                     </ul>
