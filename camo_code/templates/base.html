@@ -49,9 +49,14 @@
     </nav>
     <!-- mobile sidenav -->
     <ul class="sidenav" id="mobile-demo">
+      {% if current_user.is_authenticated %}
       <li><a href="{{ url_for('home') }}">Home</a></li>
       <li><a href="{{ url_for('profile') }}">Profile</a></li>
       <li><a href="{{ url_for('new_post')}}">New Post</a></li>
+      {% else %}
+      <li><a href="{{ url_for('login') }}">Login</a></li>
+      <li><a href="{{ url_for('register') }}">Register</a></li>
+      {% endif %}
     </ul>
   </header>
 
