@@ -113,6 +113,16 @@
             codeSnippetDisplay.textContent = codeSnippetTextarea.value;
             Prism.highlightAll();
         });
+        function updateCodeSnippetDisplay() {
+        codeSnippetDisplay.textContent = codeSnippet.value;
+        Prism.highlightElement(codeSnippetDisplay);
+    }
+
+    codeSnippet.addEventListener('input', function() {
+        updateCodeSnippetDisplay();
+    });
+
+    updateCodeSnippetDisplay();
     });
   </script>
 

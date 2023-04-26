@@ -3,7 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from flask_wtf import FlaskForm
 from flask_login import UserMixin
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, TextAreaField, PasswordField, SubmitField, SelectField, BooleanField
 from wtforms.validators import DataRequired, Email, EqualTo
 import psycopg2
 
@@ -52,7 +52,7 @@ class Post(db.Model):
     code_snippet = db.Column(db.Text)
     code_snippet_language = db.Column(db.String(20))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"))
     comments = db.relationship("Comment", backref="post", lazy="dynamic")
 
     def __repr__(self):
@@ -72,9 +72,10 @@ class Post(db.Model):
         db.session.add(comment)
         db.session.commit()
 
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
+    def delete(self, user):
+        if self.user_id == user.id:
+            db.session.delete(self)
+            db.session.commit()
 
 
 class Comment(db.Model):
@@ -82,15 +83,32 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(140))
     code_snippet = db.Column(db.Text)
+    code_snippet_language = db.Column(db.String(50))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey("post.id", ondelete="CASCADE"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"))
 
     def __repr__(self):
         return f"Comment('{self.body}', '{self.date_posted}')"
 
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
+    def delete(self, user):
+        if self.user_id == user.id:
+            db.session.delete(self)
+            db.session.commit()
+
+
+class CommentForm(FlaskForm):
+    body = StringField('Comment', validators=[DataRequired()])
+    code_snippet = TextAreaField('Code Snippet')
+    code_snippet_language = SelectField('Code Snippet Language', choices=[
+        ('markup', 'Markup'),
+        ('css', 'CSS'),
+        ('javascript', 'JavaScript'),
+        ('python', 'Python'),
+        ('ruby', 'Ruby')
+        # add more choices for other supported languages
+    ])
+    submit = SubmitField('Comment')
 
 
 class Registration(db.Model):

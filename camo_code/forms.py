@@ -4,7 +4,7 @@ from wtforms import TextAreaField, FileField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 from flask_wtf.file import FileAllowed, FileRequired
 from flask_login import current_user
-from camo_code.models import User, Profile
+from camo_code.models import User, Profile, Comment, Registration, Post
 
 
 class RegistrationForm(FlaskForm):
@@ -98,4 +98,12 @@ class PostForm(FlaskForm):
 class CommentForm(FlaskForm):
     body = StringField('Comment', validators=[DataRequired()])
     code_snippet = TextAreaField('Code Snippet')
+    code_snippet_language = SelectField('Code Snippet Language', choices=[
+        ('markup', 'Markup'),
+        ('css', 'CSS'),
+        ('javascript', 'JavaScript'),
+        ('python', 'Python'),
+        ('ruby', 'Ruby')
+        # add more choices for other supported languages
+    ])
     submit = SubmitField('Comment')

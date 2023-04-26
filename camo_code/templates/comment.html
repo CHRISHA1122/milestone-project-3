@@ -16,7 +16,7 @@
         <div class="card">
             <div class="card-content">
                 <span class="card-title center-align">Add Comment</span>
-                <form method="POST" action="{{ url_for('add_comment', post_id=post.id) }}">
+                <form method="POST" action="{{ url_for('post', post_id=post.id) }}">
                     {{ form.csrf_token }}
                     {{ form.hidden_tag() }}
                     <div class="input-field">
@@ -24,8 +24,12 @@
                         <label for="{{ form.body.id }}"><i class="fas fa-align-center"></i> Body</label>
                     </div>
                     <div class="input-field">
-                        <pre><code class="language-{{ post.code_snippet_language }} line-numbers">{{ form.code_snippet.data }}</code></pre>
-                        {{ form.code_snippet(class_="materialize-textarea") }}
+                        <pre><code id="code_snippet_display" class="language-{{ form.code_snippet_language.data }} line-numbers normalize-whitespace"></code></pre>
+                        <div>
+                            <label for="code_snippet"><i class="fas fa-code"></i> Code Snippet</label>
+                            <textarea name="code_snippet" id="code_snippet" class="materialize-textarea validate"
+                                data-language="{{ form.code_snippet_language.data }}"></textarea>
+                        </div>
                     </div>
                     <div class="card-action">
                         <button type="submit" class="btn waves-effect waves-light">Add Comment</button>

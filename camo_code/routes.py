@@ -145,15 +145,15 @@ def new_post():
 def post(post_id):
     post = Post.query.get_or_404(post_id)
     form = CommentForm()
-    comments = Comment.query.filter_by(post_id=post_id).all()
     if form.validate_on_submit():
         comment = Comment(body=form.body.data, post=post, user=current_user)
         db.session.add(comment)
         db.session.commit()
         flash("Your comment has been added!")
         return redirect(url_for("post", post_id=post.id))
+    comments = Comment.query.filter_by(post_id=post_id).all()
     return render_template(
-        "post.html", post=post, form=form, comments=comments)
+        "post.html", title=post.title, post=post, form=form, comments=comments)
 
 
 @app.route("/post/<int:post_id>/update", methods=["GET", "POST"])
@@ -198,9 +198,11 @@ def comment(post_id):
     form = CommentForm()
     post = Post.query.get_or_404(post_id)
     if form.validate_on_submit():
-        comment = Comment(body=form.body.data, code_snippet=form.code_snippet.data, post=post)
+        comment = Comment(body=form.body.data,
+                          code_snippet_language=form.code_snippet_language.data
+                          )
         db.session.add(comment)
         db.session.commit()
         flash('Your comment has been added.')
-        return redirect(url_for('post', id=post_id))
-    return render_template('comment.html', title='Add Comment', form=form)
+        return redirect(url_for('post', post_id=post_id))
+    return render_template('comment.html', title='Add Comment', form=form, post=post)
