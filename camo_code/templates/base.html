@@ -22,10 +22,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/prism-autoloader.css') }}" type="text/css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/prism-line-highlight.css') }}" type="text/css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/prism-show-language.css') }}" type="text/css">
-  <script>
-    // Initialize Highlight.js
-    hljs.initHighlightingOnLoad();
-  </script>
+  
   <title>CAMO_CODE</title>
 </head>
 
@@ -112,15 +109,11 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
   <script src="{{ url_for('static', filename='js/prism.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/prism_autoloader_highlight.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/prism_auto_highlight.min.js') }}"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const codeSnippetTextarea = document.getElementById("code_snippet");
       const codeSnippetDisplay = document.getElementById("code_snippet_display");
-      codeSnippetTextarea.addEventListener("input", function () {
-        codeSnippetDisplay.textContent = codeSnippetTextarea.value;
-        Prism.highlightAll();
-      });
 
       function updateCodeSnippetDisplay() {
         codeSnippetDisplay.textContent = codeSnippet.value;

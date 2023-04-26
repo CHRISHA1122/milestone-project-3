@@ -3,6 +3,7 @@ body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  font-family: Roboto, Lato, sans-serif;
   background-color: #D3D3D3;
   margin: 0;
   padding: 0;
@@ -18,6 +19,11 @@ li a {
 
 .card-title {
   text-transform: uppercase;
+}
+
+/*--------------------------------------------Footer*/
+footer {
+  font-family: Roboto, Lato, sans-serif;
 }
 
 /*--------------------------------------------Social Links*/
