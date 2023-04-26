@@ -15,7 +15,7 @@
     type="text/css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" type="text/css">
   <!-- Link for Prismjs -->
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css"/>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/prism.css') }}" type="text/css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/prism-autoloader.css') }}" type="text/css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/prism-line-highlight.css') }}" type="text/css">
@@ -37,12 +37,12 @@
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="fas fa-bars"></i></a>
         <ul class="right hide-on-med-and-down">
           {% if current_user.is_authenticated %}
-          <li><a href="{{ url_for('home') }}" name="Home">Home</a></li>
-          <li><a href="{{ url_for('profile') }}" name="Profile">Profile</a></li>
-          <li><a href="{{ url_for('new_post')}}" name="New Post">New Post</a></li>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('profile') }}">Profile</a></li>
+          <li><a href="{{ url_for('new_post')}}">New Post</a></li>
           {% else %}
-          <li><a href="{{ url_for('login') }}" name="Login">Login</a></li>
-          <li><a href="{{ url_for('register') }}" name="Register">Register</a></li>
+          <li><a href="{{ url_for('login') }}">Login</a></li>
+          <li><a href="{{ url_for('register') }}">Register</a></li>
           {% endif %}
         </ul>
       </div>
@@ -106,10 +106,8 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
-  <script src="{{ url_for('static', filename='js/prism.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/prism-autoloader.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/prism-line-highlight.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/prism-show-language.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/prism.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/prism_autoloader_highlight.min.js') }}"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
         const codeSnippetTextarea = document.getElementById("code_snippet");
