@@ -49,12 +49,12 @@
     <!-- mobile sidenav -->
     <ul class="sidenav" id="mobile-demo">
       {% if current_user.is_authenticated %}
-      <li><a href="{{ url_for('home') }}" name="Home">Home</a></li>
-      <li><a href="{{ url_for('profile') }}" name="Profile">Profile</a></li>
-      <li><a href="{{ url_for('new_post')}}" name="New Post">New Post</a></li>
+      <li id="home"><a href="{{ url_for('home') }}">Home</a></li>
+      <li id="profile"><a href="{{ url_for('profile') }}">Profile</a></li>
+      <li id="new_post"><a href="{{ url_for('new_post')}}">New Post</a></li>
       {% else %}
-      <li><a href="{{ url_for('login') }}" name="Login">Login</a></li>
-      <li><a href="{{ url_for('register') }}" name="Register">Register</a></li>
+      <li id="login"><a href="{{ url_for('login') }}">Login</a></li>
+      <li id="register"><a href="{{ url_for('register') }}">Register</a></li>
       {% endif %}
     </ul>
   </header>
