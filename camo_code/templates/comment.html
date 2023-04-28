@@ -16,12 +16,24 @@
         <div class="card">
             <div class="card-content">
                 <span class="card-title center-align">Add Comment</span>
-                <form method="POST" action="{{ url_for('post', post_id=post.id) }}">
+                <form method="POST" action="{{ url_for('comment', post_id=post.id) }}">
                     {{ form.csrf_token }}
                     {{ form.hidden_tag() }}
                     <div class="input-field">
                         {{ form.body(class_='materialize-textarea validate') }}
                         <label for="{{ form.body.id }}"><i class="fas fa-align-center"></i> Body</label>
+                    </div>
+                    <div class="input-field">
+                        <label for="code_snippet_language"><i class="fas fa-code"></i> Choose Language</label>
+                        <select name="code_snippet_language" id="code_snippet_language" class="dropdown">
+                            <option value="" disabled selected>Choose Language</option>
+                            <option value="markup">Markup</option>
+                            <option value="css">CSS</option>
+                            <option value="javascript">JavaScript</option>
+                            <option value="python">Python</option>
+                            <option value="ruby">Ruby</option>
+                            <!-- Add more options for other supported languages -->
+                        </select>
                     </div>
                     <div class="input-field">
                         <pre><code id="code_snippet_display" class="language-{{ form.code_snippet_language.data }} line-numbers normalize-whitespace"></code></pre>

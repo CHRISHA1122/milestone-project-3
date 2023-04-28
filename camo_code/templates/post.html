@@ -50,8 +50,11 @@
                     <ul class="collection">
                         {% for comment in comments %}
                         <li class="collection-item">
-                            <span class="bold">{{ comment.user.username }}:</span>
+                            <span class="bold">{{ comment.user_id.username }}:</span>
                             <p>{{ comment.body }}</p>
+                            {% if comment.code_snippet %}
+                                <pre><code id="code_snippet_display" class="language-{{ comment.code_snippet_language.data }} line-numbers normalize-whitespace">{{ comment.code_snippet }}</code></pre>
+                            {% endif %}
                         </li>
                         {% endfor %}
                     </ul>

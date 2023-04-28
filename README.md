@@ -8,6 +8,15 @@ A social media website for developers that allows people to create simple text p
 
 ## Table of Contents
 
+- [**Project Goals**](#project-goals)
+- [**User Experience UX**](#user-experience-ux)
+- [**Wireframes**](#wireframes)
+- [**Features**](#features)
+- [**Technologies**](#technologies)
+- [**Testing**](#testing)
+- [**Installation / Deployment**](#Installation / Deployment)
+- [**Credits**](#credits)
+- [**Acknowledgements**](#acknowledgements)
 
 ## Project Goals
 
@@ -102,6 +111,16 @@ The target audience is developers or anyone who enjoys coding.
 * The only images I used were for the social media links, credited in the credits section.
 
 ## Wireframes
+
+Wireframes for the project were developed after the idea was scribbled on a piece of paper, the program used being Figma.
+
+### Desktop Wireframe
+
+![Desktop Wireframe](assets/readme.images/camocode-desktop-wireframe.png)
+
+### Mobile Wireframe
+
+![Mobile Wireframe](assets/readme.images/camocode-mobile-wireframe.png)
 
 ## Features
 
@@ -235,6 +254,8 @@ The website was tested on three different browsers with no problems:
 * Google Chrome
 * Mozila Firefox
 
+![Lighthouse testing](assets/readme.images/desktop-performance-camocode.png)
+
 ### Mobile
 
 Developer tools on Firefox and Google Chrome were used throughout the project to check site responsiveness.
@@ -243,6 +264,8 @@ Checked the website on my own mobile and other family members with no problems:
 * Iphone
 * Samsung Galaxy
 * Dev Tools Mobile Responsiveness
+
+![Lighthouse testing](assets/readme.images/mobile-performance-camocode.png)
 
 ### HTML Validator
 
@@ -265,6 +288,23 @@ JS Validator using [ES6 Syntax Check](https://www.piliapp.com/syntax-check/es6/)
 ### Python Validator
 
 Python Validator using [pycodestyle Syntax Check](https://pypi.org/project/pycodestyle/) was used to validate Python code for PEP8 compliance.
+
+### Manual Testing
+
+* Landing/Home Page - Due to the nature and structure of the website, the user can tell immediately what the goal of the site is - As expected.
+* Log In Page - User clicks on Log In button in the navbar which takes them to the sign up page where they can create an account - As expected.
+* Register Page - User clicks on Register button in the navbar which takes them to the registration page where they can create a profile - As expected.
+* Profile Page - User clicks on Profile button in the navbar which takes them to the profile page where they can edit, delete and log out - As expected.
+* Home Page - User clicks on Home button in the navbar which takes them to the home page where they can see a list of most recent posts - As expected.
+* New Post Page - User clicks on New Post button in the navbar which takes them to the new post page where they can create a post - As expected.
+* Post Page - User clicks on view button on the post which takes them to the post page where if they are the post creater they can edit and delete or any user can make a comment on the post - As expected.
+* Update Post Page - User clicks on edit post button in post page which takes them to the update post form prepopulated with the post data where they can edit there post - As expected.
+* Comment Page - User clicks on Comment button in the post page which takes them to the comment form page where they can create a comment and post it under the post - As expected.
+
+### Bugs
+
+* Comments not showing on webpage once deployed:
+FIX - Changed the routes.py for comment and works now.
 
 ### Future Updates
 

@@ -8,7 +8,6 @@ from camo_code.forms import LoginForm, RegistrationForm, UpdateProfileForm
 from camo_code.forms import ProfileForm, PostForm, CommentForm
 from datetime import datetime
 import logging
-from pprint import pprint
 
 
 # Route for Home
@@ -211,9 +210,12 @@ def delete_post(post_id):
 def comment(post_id):
     form = CommentForm()
     post = Post.query.get_or_404(post_id)
-    if form.validate_on_submit():
-        comment = Comment(body=form.body.data,
-                          code_snippet_language=form.code_snippet_language.data
+    if request.method == 'POST':
+        comment = Comment(
+            body=form.body.data,
+            code_snippet=form.code_snippet.data,
+            code_snippet_language=form.code_snippet_language.data,
+            post_id=post.id
                           )
         db.session.add(comment)
         db.session.commit()

@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/prism-autoloader.css') }}" type="text/css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/prism-line-highlight.css') }}" type="text/css">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/prism-show-language.css') }}" type="text/css">
-  
+
   <title>CAMO_CODE</title>
 </head>
 
@@ -125,6 +125,24 @@
       });
 
       updateCodeSnippetDisplay();
+    });
+  </script>
+  <script>
+    var codeSnippet = document.getElementById('code_snippet');
+    var codeSnippetDisplay = document.getElementById('code_snippet_display');
+
+    codeSnippet.addEventListener('input', function () {
+      if (codeSnippet.value) {
+        codeSnippetDisplay.innerHTML = Prism.highlight(
+          codeSnippet.value,
+          Prism.languages[document.getElementById('code_snippet_language').value],
+          'javascript'
+        );
+        Prism.plugins.NormalizeWhitespace.normalize(codeSnippetDisplay);
+        Prism.plugins.LineNumbers.reformat(codeSnippetDisplay);
+      } else {
+        codeSnippetDisplay.innerHTML = '';
+      }
     });
   </script>
 
