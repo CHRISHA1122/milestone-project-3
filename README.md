@@ -185,6 +185,19 @@ The website is split into 9 pages, stored in 12 html files.
 
 ### Back-End Structure
 
+#### Physical Database Model
+
+Below model displays all fields stored in the database collection as well as the relationships with each collection.
+
+There are 5 collections:
+- Users - stores User profile data.
+- Posts - stores Posts data.
+- Comments - stores Comments and Subcomments data.
+- Profile - store profile data.
+- Registration - stores registration data.
+
+![Physical Database Model](assets/readme.images/camocode-database-model.png)
+
 * Built with Flask using Postgresql for the database.
 The application structure is as follows:
 * routes.py - contains all routes for the website.
